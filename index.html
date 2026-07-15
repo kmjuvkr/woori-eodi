@@ -1385,6 +1385,66 @@ document.getElementById('exportBtn').addEventListener('click', ()=>{
 });
 document.getElementById('importBtn').addEventListener('click', ()=>
   document.getElementById('importInput').click());
+
+function chooseImportMode(fileName){
+  return new Promise(resolve=>{
+    const ov = document.createElement('div');
+    ov.className = 'modal';
+    ov.innerHTML =
+      '<div class="modal-box" style="width:min(420px,94vw)">'+
+        '<div class="modal-head"><h3>백업 파일을 어떻게 불러올까요?</h3></div>'+
+        '<div style="padding:4px 18px 18px;display:flex;flex-direction:column;gap:9px">'+
+          '<p style="margin:0 0 2px;font-size:12.5px;color:var(--muted)">'+esc(fileName)+'</p>'+
+          '<button class="btn primary" id="impMerge" style="padding:12px;line-height:1.4">내 기록에 합치기 (추천)<br>'+
+            '<small style="font-weight:500;opacity:.85">내 기록은 그대로 두고 파일의 기록을 추가해요 — 친구와 지도 합칠 때</small></button>'+
+          '<button class="btn ghost" id="impReplace" style="padding:12px;line-height:1.4">전체 교체<br>'+
+            '<small style="font-weight:500">내 기록을 모두 지우고 파일 내용으로 바꿔요 — 기기 옮길 때</small></button>'+
+          '<button class="btn ghost" id="impCancel">취소</button>'+
+        '</div></div>';
+    document.body.appendChild(ov);
+    const done = v=>{ ov.remove(); resolve(v); };
+    ov.querySelector('#impMerge').addEventListener('click', ()=>done('merge'));
+    ov.querySelector('#impReplace').addEventListener('click', ()=>done('replace'));
+    ov.querySelector('#impCancel').addEventListener('click', ()=>done(null));
+    ov.addEventListener('click', e=>{ if(e.target===ov) done(null); });
+  });
+}
+
+async function mergeData(data){
+  const added = {trips:0, places:0, photos:0};
+  for(const [k, v] of Object.entries(data.regions||{})){
+    const code = V1MAP[k] || k;
+    if(!MUNIS[code] && !PROVS[code]) continue;
+    const r = region(code);
+    if(v.visited) r.visited = true;
+    if(v.color && !r.color) r.color = v.color;
+    if(v.stamp && !r.stamp) r.stamp = v.stamp;
+    const tIds = new Set(r.trips.map(t=>t.id));
+    for(const t of (v.trips||[])) if(t && t.id && !tIds.has(t.id)){ r.trips.push(t); added.trips++; }
+    const pIds = new Set(r.places.map(p=>p.id));
+    for(const p of (v.places||[])) if(p && p.id && !pIds.has(p.id)){ r.places.push(p); added.places++; }
+  }
+  const haveIds = new Set();
+  for(const arr of Object.values(photoCache)) for(const p of arr) haveIds.add(p.id);
+  for(const p of (data.photos||[])){
+    if(!p || !p.id || !p.data) continue;
+    p.region = V1MAP[p.region] || p.region;
+    if(typeof p.region==='string' && p.region.startsWith('@stamp:')){
+      const code = p.region.slice(7);
+      if(!stampRecs[code]){ await putPhoto(p); stampRecs[code] = p; }
+      continue;
+    }
+    if(haveIds.has(p.id)) continue;
+    if(!MUNIS[p.region] && !PROVS[p.region]) continue;
+    await putPhoto(p);
+    (photoCache[p.region] = photoCache[p.region]||[]).push(p);
+    added.photos++;
+  }
+  saveStore();
+  rebuildStamps(); paintMap(); renderPanel();
+  toast('합치기 완료! 기록 '+added.trips+' · 장소 '+added.places+' · 사진 '+added.photos+'개가 추가됐어요');
+}
+
 document.getElementById('importInput').addEventListener('change', async ev=>{
   const f = ev.target.files[0];
   ev.target.value = '';
@@ -1392,7 +1452,9 @@ document.getElementById('importInput').addEventListener('change', async ev=>{
   try{
     const data = JSON.parse(await f.text());
     if(data.app!=='ktravel' || !data.regions) throw new Error('형식 불일치');
-    if(!confirm('현재 데이터를 백업 파일 내용으로 덮어쓸까요?')) return;
+    const mode = await chooseImportMode(f.name);
+    if(!mode) return;
+    if(mode==='merge'){ await mergeData(data); return; }
     const regions = {};
     for(const [k, v] of Object.entries(data.regions)){
       const nk = V1MAP[k] || k;
