@@ -26,6 +26,39 @@
   --map0:#332C24; --map-visited:#4A3E2C; --map-stroke:#262019; --prov-stroke:#6B5D4A;
   --food:#E5A76A; --shadow:0 10px 26px rgba(0,0,0,.4);
 }
+/* ---------- 테마(스킨): 바다 / 벚꽃 ---------- */
+:root[data-skin="sea"], :root[data-theme="light"][data-skin="sea"]{
+  --bg:#EDF4F3; --surface:#FFFFFF; --surface2:#E1EDEA; --ink:#243A3C; --muted:#6E888A;
+  --line:#D2E2DF; --accent:#3E8E9E; --accent-ink:#FFFFFF;
+  --map0:#E3ECE9; --map-visited:#C9E2DA; --map-stroke:#D5E3DF; --prov-stroke:#9CBAB6;
+}
+:root[data-skin="pink"], :root[data-theme="light"][data-skin="pink"]{
+  --bg:#FBF0F3; --surface:#FFFFFF; --surface2:#F6E2E9; --ink:#4A3540; --muted:#A58694;
+  --line:#EFD9E1; --accent:#E0708F; --accent-ink:#FFFFFF;
+  --map0:#F4E6EA; --map-visited:#F0D3DC; --map-stroke:#EBD7DD; --prov-stroke:#CBA5B2;
+}
+@media (prefers-color-scheme: dark){
+  :root[data-skin="sea"]{
+    --bg:#131D1C; --surface:#1B2827; --surface2:#233432; --ink:#E4EFED; --muted:#8FA9A6;
+    --line:#2E4341; --accent:#7FC2CE; --accent-ink:#0F1D1C;
+    --map0:#22302E; --map-visited:#2E4A44; --map-stroke:#182220; --prov-stroke:#54726E;
+  }
+  :root[data-skin="pink"]{
+    --bg:#211820; --surface:#2B2029; --surface2:#372833; --ink:#F1E5EB; --muted:#AE93A1;
+    --line:#463442; --accent:#E794AC; --accent-ink:#271620;
+    --map0:#33262F; --map-visited:#4C3440; --map-stroke:#241820; --prov-stroke:#6E5462;
+  }
+}
+:root[data-theme="dark"][data-skin="sea"]{
+  --bg:#131D1C; --surface:#1B2827; --surface2:#233432; --ink:#E4EFED; --muted:#8FA9A6;
+  --line:#2E4341; --accent:#7FC2CE; --accent-ink:#0F1D1C;
+  --map0:#22302E; --map-visited:#2E4A44; --map-stroke:#182220; --prov-stroke:#54726E;
+}
+:root[data-theme="dark"][data-skin="pink"]{
+  --bg:#211820; --surface:#2B2029; --surface2:#372833; --ink:#F1E5EB; --muted:#AE93A1;
+  --line:#463442; --accent:#E794AC; --accent-ink:#271620;
+  --map0:#33262F; --map-visited:#4C3440; --map-stroke:#241820; --prov-stroke:#6E5462;
+}
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
 body{background:var(--bg);color:var(--ink);
@@ -201,6 +234,7 @@ button.stat:hover{box-shadow:inset 0 0 0 1.5px var(--accent)}
 .lchip{font-size:11.5px;font-weight:700;text-decoration:none;border:1.5px solid var(--line);
   border-radius:999px;padding:3px 10px;background:var(--surface)}
 .lchip:hover{border-color:var(--accent);color:var(--accent)}
+.lchip.exact{border-color:var(--accent);color:var(--accent);font-weight:800}
 
 .form{background:var(--surface2);border-radius:14px;padding:13px;margin-bottom:10px;
   display:flex;flex-direction:column;gap:8px}
@@ -268,6 +302,70 @@ button.stat:hover{box-shadow:inset 0 0 0 1.5px var(--accent)}
   .photo-grid{grid-template-columns:repeat(2,1fr)}
   .progress .bar{width:110px}
   #panel{padding:16px}
+}
+/* ---------- 하단 탭바 ---------- */
+body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:60;background:var(--surface);
+  border-top:1.5px solid var(--line);box-shadow:0 -4px 14px rgba(0,0,0,.05)}
+.tabbar .tb-in{display:flex;justify-content:space-around;max-width:900px;margin:0 auto;
+  padding:7px 4px calc(7px + env(safe-area-inset-bottom))}
+.tabbar button{display:flex;flex-direction:column;align-items:center;gap:3px;
+  font-size:10.5px;font-weight:800;color:var(--muted);padding:4px 8px;border-radius:12px;min-width:48px}
+.tabbar button svg{width:21px;height:21px}
+.tabbar button.on{color:var(--accent)}
+.tabbar button:hover{color:var(--accent)}
+
+/* ---------- 탭 화면 공통 ---------- */
+.tabview{max-width:900px;margin:0 auto}
+.tabview>h2{font-size:21px;margin:4px 2px 14px}
+.set-card{background:var(--surface);border:1.5px solid var(--line);border-radius:18px;
+  padding:16px 18px;margin-bottom:12px}
+.set-card h3{margin:0 0 12px;font-size:14.5px}
+.set-card .hint{margin:10px 0 0}
+.set-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.set-row input[type=text]{flex:1;min-width:150px;border:1.5px solid var(--line);border-radius:10px;
+  background:var(--surface2);padding:9px 12px;font-size:14px}
+.skin-row{display:flex;gap:10px;flex-wrap:wrap}
+.skin-card{border:2px solid var(--line);border-radius:14px;padding:11px 15px;
+  display:flex;align-items:center;gap:9px;font-weight:800;font-size:13.5px;background:var(--surface2)}
+.skin-card.on{border-color:var(--accent);outline:1.5px solid var(--accent)}
+.skin-card i{width:15px;height:15px;border-radius:50%;display:inline-block;border:1px solid rgba(0,0,0,.1)}
+
+/* ---------- 어디어디 대시보드 ---------- */
+.dash-hero{background:var(--surface);border:1.5px solid var(--line);border-radius:22px;
+  padding:20px;margin-bottom:12px}
+.dash-hero h2{margin:0 0 2px;font-size:22px}
+.dash-hero .sub{font-size:12.5px;color:var(--muted);margin-bottom:16px}
+.dash-progress{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pcard{border:1.5px solid var(--line);border-radius:16px;padding:13px 15px;background:var(--surface2)}
+.pcard .pt{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;font-weight:800;margin-bottom:8px}
+.pcard .pt span{color:var(--muted);font-weight:600;font-size:12px;font-variant-numeric:tabular-nums}
+.pcard .bar{width:100%;height:9px}
+.pcard .pct{font-size:11px;color:var(--muted);margin-top:5px;text-align:right;font-variant-numeric:tabular-nums}
+.dash-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:12px}
+.dcard{border-radius:18px;padding:14px 15px;text-align:left;border:1.5px solid rgba(76,65,54,.1);color:#4C4136}
+.dcard .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.dcard svg{width:20px;height:20px}
+.dcard .lbl{font-size:12px;opacity:.75}
+.dcard b{display:block;font-size:20px;font-variant-numeric:tabular-nums;line-height:1.3}
+.dcard.c1{background:#F7E6A3}.dcard.c2{background:#C6E8CE}.dcard.c3{background:#F8CFD8}.dcard.c4{background:#C9E2F2}
+.dcard:hover{filter:brightness(1.03)}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.icard{background:var(--surface);border:1.5px solid var(--line);border-radius:18px;padding:15px 17px}
+.icard h3{margin:0 0 11px;font-size:13.5px}
+.irow{display:flex;align-items:center;gap:10px;background:var(--surface2);border-radius:12px;
+  padding:10px 13px;margin-bottom:7px;font-size:13px}
+.irow .lb{color:var(--muted);font-size:11.5px}
+.irow b{font-size:13.5px}
+.irow .num{margin-left:auto;background:var(--surface);border:1.5px solid var(--line);
+  border-radius:999px;padding:2px 11px;font-size:12px;font-weight:800;font-variant-numeric:tabular-nums;flex:none}
+@media (max-width:700px){
+  .dash-progress{grid-template-columns:1fr}
+  .dash-cards{grid-template-columns:1fr 1fr}
+  .info-grid{grid-template-columns:1fr}
+}
+@media (min-width:700px){
+  .tabview .photo-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
 }
 @media (prefers-reduced-motion: reduce){
   *{transition:none !important;animation:none !important}
@@ -371,14 +469,6 @@ button.stat:hover{box-shadow:inset 0 0 0 1.5px var(--accent)}
         <span class="progress-num"><b id="visitedCount">0</b>곳 · 시도 <span id="provCount">0</span>/17</span>
         <div class="bar"><i id="progressBar"></i></div>
       </div>
-      <div class="menu-wrap">
-        <button id="menuBtn" class="icon-btn" title="데이터 관리" aria-label="데이터 관리">⚙</button>
-        <div id="menu" class="menu hidden">
-          <button id="exportBtn">데이터 내보내기 (백업)</button>
-          <button id="importBtn">데이터 가져오기</button>
-          <button id="resetBtn" class="danger">전체 초기화</button>
-        </div>
-      </div>
     </div>
   </header>
 
@@ -404,7 +494,58 @@ button.stat:hover{box-shadow:inset 0 0 0 1.5px var(--accent)}
 
     <aside id="panel"></aside>
   </main>
+
+  <section class="tabview hidden" id="view-home"></section>
+  <section class="tabview hidden" id="view-trips"></section>
+  <section class="tabview hidden" id="view-places"></section>
+  <section class="tabview hidden" id="view-photos"></section>
+
+  <section class="tabview hidden" id="view-settings">
+    <h2>설정</h2>
+    <div class="set-card">
+      <h3>화면 테마</h3>
+      <div class="skin-row">
+        <button class="skin-card" data-skin="cream"><i style="background:#FBF6ED"></i><i style="background:#E98E7E"></i>크림</button>
+        <button class="skin-card" data-skin="sea"><i style="background:#EDF4F3"></i><i style="background:#3E8E9E"></i>바다</button>
+        <button class="skin-card" data-skin="pink"><i style="background:#FBF0F3"></i><i style="background:#E0708F"></i>벚꽃</button>
+      </div>
+      <p class="hint">기기별로 저장돼요. 시스템 다크모드도 자동으로 따라갑니다.</p>
+    </div>
+    <div class="set-card">
+      <h3>대표 이름</h3>
+      <div class="set-row">
+        <input type="text" id="setTitleInput" maxlength="16" placeholder="우리어디">
+        <button class="btn primary" id="setTitleSave">저장</button>
+      </div>
+      <p class="hint">지도 위의 큰 제목과 브라우저 탭 이름이 바뀌어요. 비우면 '우리어디'로 돌아갑니다.</p>
+    </div>
+    <div class="set-card">
+      <h3>데이터</h3>
+      <div class="set-row">
+        <button class="btn ghost" id="exportBtn">내보내기 (백업)</button>
+        <button class="btn ghost" id="importBtn">가져오기 (합치기·교체)</button>
+        <button class="btn ghost" id="resetBtn" style="color:var(--danger);border-color:var(--danger)">전체 초기화</button>
+      </div>
+      <p class="hint">기록은 이 기기 브라우저에만 저장돼요. 친구와 지도를 합치거나 기기를 옮길 땐
+        내보내기 → 카톡 등으로 전송 → 가져오기를 사용하세요.</p>
+    </div>
+    <div class="set-card">
+      <h3>정보</h3>
+      <p class="hint" style="margin:0">우리어디 — 우리의 국내여행 스티커북 · 행정구역 경계: 통계청(KOSTAT) 2018</p>
+    </div>
+  </section>
 </div>
+
+<nav class="tabbar" aria-label="메뉴">
+  <div class="tb-in">
+    <button data-tab="map" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/><path d="M9 4v14M15 6v14"/></svg>지도</button>
+    <button data-tab="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="3" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="3" width="7.5" height="7.5" rx="2"/><rect x="3" y="13.5" width="7.5" height="7.5" rx="2"/><rect x="13.5" y="13.5" width="7.5" height="7.5" rx="2"/></svg>어디어디</button>
+    <button data-tab="trips"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>여행기록</button>
+    <button data-tab="places"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M7 3v5a2 2 0 0 0 2 2 2 2 0 0 0 2-2V3M9 3v18M16 3c2 0 3 2 3 5s-1 5-3 5v8M16 3v10"/></svg>맛집·장소</button>
+    <button data-tab="photos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><rect x="3" y="6" width="18" height="14" rx="3"/><path d="M9 6l1.5-2h3L15 6"/><circle cx="12" cy="13" r="3.5"/></svg>사진첩</button>
+    <button data-tab="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M18.7 5.3l-2.1 2.1M7.4 16.6l-2.1 2.1"/></svg>설정</button>
+  </div>
+</nav>
 
 <input type="file" id="photoInput" accept="image/*" multiple hidden>
 <input type="file" id="stampPhotoInput" accept="image/*" hidden>
@@ -805,6 +946,22 @@ function renderPanel(){
   else renderMuni(muniSel);
 }
 function regionLabel(c){ return MUNIS[c] ? MUNIS[c].n : (PROVS[c] ? PROVS[c].n : ''); }
+function placeQuery(c, pl){
+  return encodeURIComponent((regionLabel(c)+' '+pl.name+(pl.addr?' '+pl.addr:'')).trim());
+}
+function naverHref(c, pl){
+  if(pl.link && /^https?:\/\//i.test(pl.link)) return pl.link;
+  return 'https://map.naver.com/p/search/'+placeQuery(c, pl);
+}
+function placeLinksHTML(c, pl, extra){
+  const q = placeQuery(c, pl);
+  return '<div class="links">'+
+    '<a class="lchip'+(pl.link?' exact':'')+'" target="_blank" rel="noopener" href="'+esc(naverHref(c, pl))+'"'+
+      (pl.link?' title="저장해둔 정확한 가게 링크로 연결돼요"':'')+'>네이버지도'+(pl.link?' ✓':'')+'</a>'+
+    '<a class="lchip" target="_blank" rel="noopener" href="https://map.kakao.com/?q='+q+'">카카오맵</a>'+
+    '<a class="lchip" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query='+q+'">구글지도</a>'+
+    (extra||'')+'</div>';
+}
 
 function renderCountry(){
   const t = totals();
@@ -841,7 +998,11 @@ function renderCountry(){
   panel.querySelectorAll('.ychip').forEach(b=>
     b.addEventListener('click', ()=>setYearFilter(b.dataset.y)));
   panel.querySelectorAll('[data-stat]').forEach(b=>
-    b.addEventListener('click', ()=>renderListView(b.dataset.stat)));
+    b.addEventListener('click', ()=>{
+      const k = b.dataset.stat;
+      if(k==='munis') renderListView('munis');
+      else switchTab(k);
+    }));
 }
 
 /* ---------- 모아보기 ---------- */
@@ -1025,16 +1186,12 @@ function sectionsHTML(code, r, legacy){
   }
   let placesHtml = r.places.length ? '' : '<div class="empty">저장한 맛집·명소가 없어요</div>';
   for(const pl of r.places){
-    const q = encodeURIComponent(label+' '+pl.name);
     placesHtml += '<div class="item">'+
       '<div class="t"><span class="badge-food">'+esc(pl.cat||'맛집')+'</span>'+esc(pl.name)+'</div>'+
+      (pl.addr?'<div class="d">'+esc(pl.addr)+'</div>':'')+
       (pl.rating?'<div class="stars">'+'★'.repeat(pl.rating)+'<span style="opacity:.3">'+'★'.repeat(5-pl.rating)+'</span></div>':'')+
       (pl.memo?'<div class="m">'+esc(pl.memo)+'</div>':'')+
-      '<div class="links">'+
-        '<a class="lchip" target="_blank" rel="noopener" href="https://map.naver.com/p/search/'+q+'">네이버지도</a>'+
-        '<a class="lchip" target="_blank" rel="noopener" href="https://map.kakao.com/?q='+q+'">카카오맵</a>'+
-        '<a class="lchip" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query='+q+'">구글지도</a>'+
-      '</div>'+
+      placeLinksHTML(code, pl)+
       '<button class="edit" data-edit-place="'+pl.id+'" title="수정">✎</button>'+
       '<button class="del" data-del-place="'+pl.id+'" title="삭제">✕</button></div>';
   }
@@ -1059,7 +1216,10 @@ function sectionsHTML(code, r, legacy){
       '<button class="add-btn" id="addPhotoBtn">＋ 사진</button></div>'+
       '<div>'+photosHtml+'</div></div>';
 }
-function rerenderCurrent(){ renderPanel(); }
+function rerenderCurrent(){
+  renderPanel();
+  if(typeof currentTab!=='undefined' && currentTab!=='map') switchTab(currentTab);
+}
 function bindSections(code, legacy){
   const r = region(code);
   document.getElementById('addTripBtn').addEventListener('click', ()=>showTripForm(code));
@@ -1128,17 +1288,29 @@ function showPlaceForm(code, editId){
           cats.map(c=>'<option'+(cur&&cur.cat===c?' selected':'')+'>'+c+'</option>').join('')+
         '</select>'+
       '</div>'+
+      '<input type="text" id="pAddr" placeholder="지점·주소 (같은 이름 가게 구분용, 선택)" maxlength="60" value="'+esc(cur&&cur.addr?cur.addr:'')+'">'+
+      '<div class="form-row">'+
+        '<input type="text" id="pLink" placeholder="네이버지도 공유 링크 붙여넣기 (선택)" value="'+esc(cur&&cur.link?cur.link:'')+'">'+
+        '<button type="button" class="lchip" id="pFind" style="flex:0 0 auto;font-size:12.5px">네이버에서 찾기 ↗</button>'+
+      '</div>'+
       '<div class="star-pick" id="pStars" aria-label="별점">'+
         [1,2,3,4,5].map(i=>'<button data-star="'+i+'"'+(i<=rating?' class="on"':'')+' aria-label="'+i+'점">★</button>').join('')+
       '</div>'+
       '<textarea id="pMemo" placeholder="메모 — 추천 메뉴, 팁 등">'+esc(cur?cur.memo:'')+'</textarea>'+
-      '<p style="margin:0;font-size:11.5px;color:var(--muted)">저장하면 네이버지도·카카오맵·구글지도 검색 링크가 자동으로 붙어요</p>'+
+      '<p style="margin:0;font-size:11.5px;color:var(--muted)">[네이버에서 찾기]로 정확한 가게를 확인하고 공유 링크를 복사해 붙여넣으면,<br>저장 후 네이버지도 버튼이 검색이 아니라 <b>바로 그 가게</b>로 연결돼요</p>'+
       '<div class="form-actions">'+
         '<button class="btn ghost" id="pCancel">취소</button>'+
         '<button class="btn primary" id="pSave">'+(cur?'수정 완료':'저장')+'</button>'+
       '</div></div>';
   host.scrollIntoView({behavior:'smooth',block:'nearest'});
   document.getElementById('pName').focus();
+  document.getElementById('pFind').addEventListener('click', ()=>{
+    const nm = document.getElementById('pName').value.trim();
+    if(!nm){ toast('먼저 가게 이름을 입력해 주세요'); return; }
+    const addr = document.getElementById('pAddr').value.trim();
+    const q = encodeURIComponent((regionLabel(code)+' '+nm+(addr?' '+addr:'')).trim());
+    window.open('https://map.naver.com/p/search/'+q, '_blank', 'noopener');
+  });
   host.querySelectorAll('[data-star]').forEach(b=>b.addEventListener('click', ()=>{
     rating = +b.dataset.star;
     host.querySelectorAll('[data-star]').forEach(x=>
@@ -1148,7 +1320,14 @@ function showPlaceForm(code, editId){
   document.getElementById('pSave').addEventListener('click', ()=>{
     const name = document.getElementById('pName').value.trim();
     if(!name){ toast('이름을 입력해 주세요'); return; }
+    let link = document.getElementById('pLink').value.trim();
+    if(link && !/^https?:\/\//i.test(link)){
+      if(/^(naver\.me|map\.naver\.com|place\.map\.kakao\.com|kko\.kakao\.com)\//i.test(link)) link = 'https://'+link;
+      else { toast('링크는 네이버지도 공유 링크(주소)를 붙여넣어 주세요'); return; }
+    }
     const vals = {name, cat: document.getElementById('pCat').value, rating,
+      addr: document.getElementById('pAddr').value.trim(),
+      link,
       memo: document.getElementById('pMemo').value.trim()};
     if(cur) Object.assign(cur, vals);
     else region(code).places.push(Object.assign({id:uid()}, vals));
@@ -1362,19 +1541,13 @@ document.getElementById('titleEditBtn').addEventListener('click', ()=>{
   inp.addEventListener('blur', done);
 });
 
-/* ================= 메뉴: 백업/복원/초기화 ================= */
-const menu = document.getElementById('menu');
-document.getElementById('menuBtn').addEventListener('click', ev=>{
-  ev.stopPropagation(); menu.classList.toggle('hidden');
-});
-document.addEventListener('click', ()=>menu.classList.add('hidden'));
-
+/* ================= 백업/복원/초기화 (설정 탭) ================= */
 document.getElementById('exportBtn').addEventListener('click', ()=>{
   const photos = [];
   for(const arr of Object.values(photoCache)) photos.push(...arr);
   photos.push(...Object.values(stampRecs));
   const payload = {app:'ktravel', version:2, exportedAt:new Date().toISOString(),
-    title:store.title||null, regions:store.regions, photos};
+    title:store.title||null, skin:store.skin||null, regions:store.regions, photos};
   const blob = new Blob([JSON.stringify(payload)], {type:'application/json'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
@@ -1460,8 +1633,8 @@ document.getElementById('importInput').addEventListener('change', async ev=>{
       const nk = V1MAP[k] || k;
       regions[nk] = Object.assign(blankRegion(), v);
     }
-    store = {regions, migrated:true, title:data.title||null};
-    saveStore(); applyTitle();
+    store = {regions, migrated:true, title:data.title||null, skin:data.skin||store.skin||null};
+    saveStore(); applyTitle(); applySkin();
     await clearPhotos();
     for(const p of (data.photos||[])){
       p.region = V1MAP[p.region] || p.region;
@@ -1475,9 +1648,200 @@ document.getElementById('importInput').addEventListener('change', async ev=>{
 });
 document.getElementById('resetBtn').addEventListener('click', async ()=>{
   if(!confirm('모든 여행 기록·맛집·사진·색·스탬프가 삭제됩니다. 정말 초기화할까요?')) return;
-  store = {regions:{}, migrated:true}; saveStore(); applyTitle();
+  store = {regions:{}, migrated:true, skin:store.skin||null}; saveStore(); applyTitle();
   await clearPhotos(); photoCache = {}; stampRecs = {};
   rebuildStamps(); setYearFilter(null); goCountry(); toast('초기화했어요');
+});
+
+/* ================= 테마(스킨) ================= */
+function applySkin(){
+  const s = store.skin;
+  if(s && s!=='cream') document.documentElement.dataset.skin = s;
+  else delete document.documentElement.dataset.skin;
+}
+document.querySelectorAll('.skin-card').forEach(b=>b.addEventListener('click', ()=>{
+  store.skin = b.dataset.skin==='cream' ? null : b.dataset.skin;
+  saveStore(); applySkin(); fillSettings(); toast('테마를 바꿨어요');
+}));
+
+/* ================= 하단 탭 ================= */
+let currentTab = 'map';
+function switchTab(t){
+  currentTab = t;
+  document.querySelector('main').classList.toggle('hidden', t!=='map');
+  for(const k of ['home','trips','places','photos','settings'])
+    document.getElementById('view-'+k).classList.toggle('hidden', t!==k);
+  document.querySelectorAll('.tabbar button').forEach(b=>
+    b.classList.toggle('on', b.dataset.tab===t));
+  if(t==='home') renderHomeView();
+  else if(t==='trips') renderTripsView();
+  else if(t==='places') renderPlacesView();
+  else if(t==='photos') renderPhotosView();
+  else if(t==='settings') fillSettings();
+  window.scrollTo(0,0);
+}
+document.querySelectorAll('.tabbar button').forEach(b=>
+  b.addEventListener('click', ()=>switchTab(b.dataset.tab)));
+
+function isVisitedRaw(code){
+  const r = store.regions[code];
+  return !!r && (r.visited || r.color || r.stamp || r.trips.length>0 || r.places.length>0 || photosOf(code).length>0);
+}
+function goMuniFromTab(code){
+  switchTab('map');
+  if(MUNIS[code]) selectMuni(code);
+  else if(PROVS[code]) selectProv(code);
+}
+
+/* ================= 어디어디 대시보드 ================= */
+function renderHomeView(){
+  const host = document.getElementById('view-home');
+  const t = totals();
+  const munisAll = Object.keys(MUNIS);
+  const visited = munisAll.filter(isVisitedRaw);
+  const provsVisited = new Set(visited.map(c=>MUNIS[c].p)).size;
+  const pctProv = Math.round(provsVisited/17*1000)/10;
+  const pctMuni = Math.round(visited.length/munisAll.length*1000)/10;
+  // 최애 지역: 여행 기록이 가장 많은 곳
+  let best = null, bestN = 0;
+  for(const [c, r] of Object.entries(store.regions)){
+    if(!MUNIS[c]) continue;
+    if(r.trips.length > bestN){ bestN = r.trips.length; best = c; }
+  }
+  // 최근 여행: 날짜 최신
+  let last = null;
+  for(const [c, r] of Object.entries(store.regions))
+    for(const tr of r.trips)
+      if(tr.date && (MUNIS[c]||PROVS[c]) && (!last || tr.date > last.tr.date)) last = {c, tr};
+  const curYear = String(new Date().getFullYear());
+  const thisYear = new Set();
+  for(const [c, r] of Object.entries(store.regions))
+    if(MUNIS[c] && r.trips.some(x=>(x.date||'').startsWith(curYear))) thisYear.add(c);
+
+  host.innerHTML =
+    '<div class="dash-hero">'+
+      '<h2>어디어디?!</h2><div class="sub">우리 여행 현황 한눈에 보기</div>'+
+      '<div class="dash-progress">'+
+        '<div class="pcard"><div class="pt">전국 시·도 방문율<span>'+provsVisited+' / 17</span></div>'+
+          '<div class="bar"><i style="width:'+(provsVisited/17*100)+'%"></i></div>'+
+          '<div class="pct">'+pctProv+'% 달성!</div></div>'+
+        '<div class="pcard"><div class="pt">시·군·구 정복률<span>'+visited.length+' / '+munisAll.length+'</span></div>'+
+          '<div class="bar"><i style="width:'+(visited.length/munisAll.length*100)+'%"></i></div>'+
+          '<div class="pct">'+pctMuni+'% 달성!</div></div>'+
+      '</div></div>'+
+    '<div class="dash-cards">'+
+      '<button class="dcard c1" data-tab-go="trips"><span class="top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span>↗</span></span><span class="lbl">다녀온 총 여행</span><b>'+t.trips+'회</b></button>'+
+      '<button class="dcard c2" data-tab-go="photos"><span class="top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="6" width="18" height="14" rx="3"/><circle cx="12" cy="13" r="3.5"/></svg><span>↗</span></span><span class="lbl">수집한 추억 사진</span><b>'+t.photos+'장</b></button>'+
+      '<button class="dcard c3" data-tab-go="places"><span class="top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M7 3v5a2 2 0 0 0 4 0V3M9 3v18M16 3c2 0 3 2 3 5s-1 5-3 5v8"/></svg><span>↗</span></span><span class="lbl">저장한 맛집·장소</span><b>'+t.places+'곳</b></button>'+
+      '<button class="dcard c4" data-tab-go="map"><span class="top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2z"/></svg><span>↗</span></span><span class="lbl">방문한 시·군·구</span><b>'+visited.length+'곳</b></button>'+
+    '</div>'+
+    '<div class="info-grid">'+
+      '<div class="icard"><h3>최애 & 최근 여행</h3>'+
+        '<div class="irow'+(best?'" data-go-m="'+best+'" style="cursor:pointer':'')+'"><div><div class="lb">가장 많이 간 지역</div><b>'+
+          (best? esc(MUNIS[best].n)+' <small style="color:var(--muted)">'+bestN+'회</small>':'아직 기록이 없어요')+'</b></div></div>'+
+        '<div class="irow'+(last?'" data-go-m="'+last.c+'" style="cursor:pointer':'')+'" style="margin-bottom:0"><div><div class="lb">최근 다녀온 발자국</div><b>'+
+          (last? esc(last.tr.title||'여행')+' <small style="color:var(--muted)">'+fmtDate(last.tr.date)+' · '+esc(regionLabel(last.c))+'</small>':'아직 기록이 없어요')+'</b></div></div>'+
+      '</div>'+
+      '<div class="icard"><h3>소소한 여행 정보</h3>'+
+        '<div class="irow"><span>올해('+curYear+') 방문한 지역</span><span class="num">'+thisYear.size+'곳</span></div>'+
+        '<div class="irow" style="margin-bottom:0"><span>아직 못 가본 시·군·구</span><span class="num">'+(munisAll.length-visited.length)+'곳</span></div>'+
+      '</div>'+
+    '</div>';
+  host.querySelectorAll('[data-tab-go]').forEach(b=>
+    b.addEventListener('click', ()=>switchTab(b.dataset.tabGo)));
+  host.querySelectorAll('[data-go-m]').forEach(el=>
+    el.addEventListener('click', ()=>goMuniFromTab(el.dataset.goM)));
+}
+
+/* ================= 여행기록 탭 (연도별) ================= */
+let tripsYearSel = '';
+function renderTripsView(){
+  const host = document.getElementById('view-trips');
+  const all = [];
+  for(const [c, r] of Object.entries(store.regions))
+    for(const t of r.trips) if(MUNIS[c]||PROVS[c]) all.push({c, t});
+  const years = [...new Set(all.map(x=>(x.t.date||'').slice(0,4)).filter(Boolean))].sort().reverse();
+  if(tripsYearSel && !years.includes(tripsYearSel)) tripsYearSel = '';
+  const shown = tripsYearSel ? all.filter(x=>(x.t.date||'').startsWith(tripsYearSel)) : all;
+  shown.sort((a,b)=>(b.t.date||'').localeCompare(a.t.date||''));
+  let chips = '';
+  if(years.length) chips = '<div class="year-row"><span>연도별</span>'+
+    '<button class="ychip'+(tripsYearSel?'':' on')+'" data-y="">전체</button>'+
+    years.map(y=>'<button class="ychip'+(tripsYearSel===y?' on':'')+'" data-y="'+y+'">'+y+'</button>').join('')+'</div>';
+  let list = '', lastYear = null;
+  for(const {c, t} of shown){
+    const y = (t.date||'').slice(0,4) || '날짜 미입력';
+    if(!tripsYearSel && y!==lastYear){ list += '<div class="list-sub">'+y+'</div>'; lastYear = y; }
+    list += '<button class="list-item col" data-go-m="'+c+'">'+
+      '<span class="li-top"><b>'+esc(t.title||'여행')+'</b><span class="cnt">'+(t.date?fmtDate(t.date):'')+'</span></span>'+
+      '<span class="li-sub">'+esc(regionLabel(c))+(t.memo?' · '+esc(t.memo.length>44?t.memo.slice(0,44)+'…':t.memo):'')+'</span></button>';
+  }
+  host.innerHTML = '<h2>여행기록 <span style="color:var(--muted);font-size:14px;font-weight:600">'+shown.length+'건</span></h2>'+chips+
+    '<div class="list-wrap">'+(list||'<div class="empty">아직 여행 기록이 없어요 — 지도에서 지역을 눌러 첫 기록을 남겨보세요!</div>')+'</div>';
+  host.querySelectorAll('.ychip').forEach(b=>b.addEventListener('click', ()=>{
+    tripsYearSel = b.dataset.y; renderTripsView();
+  }));
+  host.querySelectorAll('[data-go-m]').forEach(b=>
+    b.addEventListener('click', ()=>goMuniFromTab(b.dataset.goM)));
+}
+
+/* ================= 맛집·장소 탭 ================= */
+let placeCatSel = '';
+function renderPlacesView(){
+  const host = document.getElementById('view-places');
+  const all = [];
+  for(const [c, r] of Object.entries(store.regions))
+    for(const pl of r.places){ if(MUNIS[c]||PROVS[c]) all.push({c, pl}); }
+  const cats = ['맛집','카페','명소','숙소'];
+  const shown = placeCatSel ? all.filter(x=>(x.pl.cat||'맛집')===placeCatSel) : all;
+  const chips = '<div class="year-row"><span>분류</span>'+
+    '<button class="ychip'+(placeCatSel?'':' on')+'" data-c="">전체</button>'+
+    cats.map(cc=>'<button class="ychip'+(placeCatSel===cc?' on':'')+'" data-c="'+cc+'">'+cc+'</button>').join('')+'</div>';
+  const list = shown.map(({c, pl})=>{
+    return '<div class="item">'+
+      '<div class="t"><span class="badge-food">'+esc(pl.cat||'맛집')+'</span>'+esc(pl.name)+'</div>'+
+      '<div class="li-sub" style="margin-top:2px">'+esc(regionLabel(c))+(pl.addr?' · '+esc(pl.addr):'')+'</div>'+
+      (pl.rating?'<div class="stars">'+'★'.repeat(pl.rating)+'<span style="opacity:.3">'+'★'.repeat(5-pl.rating)+'</span></div>':'')+
+      (pl.memo?'<div class="m">'+esc(pl.memo)+'</div>':'')+
+      placeLinksHTML(c, pl, '<button class="lchip" data-go-m="'+c+'">지역 보기</button>')+
+      '</div>'; }).join('');
+  host.innerHTML = '<h2>맛집·장소 <span style="color:var(--muted);font-size:14px;font-weight:600">'+shown.length+'곳</span></h2>'+chips+
+    '<div class="list-wrap">'+(list||'<div class="empty">저장한 곳이 없어요 — 지역을 선택해 맛집을 추가해 보세요!</div>')+'</div>';
+  host.querySelectorAll('.ychip').forEach(b=>b.addEventListener('click', ()=>{
+    placeCatSel = b.dataset.c; renderPlacesView();
+  }));
+  host.querySelectorAll('[data-go-m]').forEach(b=>
+    b.addEventListener('click', ()=>goMuniFromTab(b.dataset.goM)));
+}
+
+/* ================= 사진첩 탭 ================= */
+function renderPhotosView(){
+  const host = document.getElementById('view-photos');
+  const all = [];
+  for(const [c, arr] of Object.entries(photoCache))
+    for(const ph of arr){ if(MUNIS[c]||PROVS[c]) all.push({c, ph}); }
+  all.sort((a,b)=>b.ph.ts-a.ph.ts);
+  const grid = all.length ? '<div class="photo-grid">'+all.map(({c, ph})=>
+    '<button data-lb="'+c+'|'+ph.id+'"><img src="'+ph.data+'" alt="'+esc(ph.caption||regionLabel(c)+' 사진')+'" loading="lazy"></button>').join('')+'</div>'
+    : '<div class="empty">아직 사진이 없어요 — 지역을 선택해 추억을 담아보세요!</div>';
+  host.innerHTML = '<h2>사진첩 <span style="color:var(--muted);font-size:14px;font-weight:600">'+all.length+'장</span></h2>'+grid;
+  host.querySelectorAll('[data-lb]').forEach(b=>b.addEventListener('click', ()=>{
+    const i = b.dataset.lb.indexOf('|');
+    openLightbox(b.dataset.lb.slice(0,i), b.dataset.lb.slice(i+1));
+  }));
+}
+
+/* ================= 설정 탭 ================= */
+function fillSettings(){
+  document.getElementById('setTitleInput').value = store.title || '';
+  const cur = store.skin || 'cream';
+  document.querySelectorAll('.skin-card').forEach(b=>
+    b.classList.toggle('on', b.dataset.skin===cur));
+}
+document.getElementById('setTitleSave').addEventListener('click', ()=>{
+  const v = document.getElementById('setTitleInput').value.trim();
+  store.title = (v && v!==DEFAULT_TITLE) ? v : null;
+  saveStore(); applyTitle(); toast('대표 이름을 저장했어요');
 });
 
 /* ================= 토스트 ================= */
@@ -1492,6 +1856,7 @@ function toast(msg){
 
 /* ================= 시작 ================= */
 (async function init(){
+  applySkin();
   applyTitle();
   await loadPhotos();
   rebuildStamps();
