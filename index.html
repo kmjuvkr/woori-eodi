@@ -99,6 +99,15 @@ main{display:grid;grid-template-columns:minmax(0,1fr) 410px;gap:20px;align-items
   transform:translate(-50%,-135%)}
 .tooltip small{display:block;font-weight:500;opacity:.75}
 .map-note{position:absolute;left:16px;bottom:12px;font-size:11.5px;color:var(--muted)}
+.go-panel{position:absolute;left:50%;transform:translateX(-50%);bottom:14px;z-index:7;
+  display:none;background:var(--accent);color:var(--accent-ink);border-radius:999px;
+  padding:10px 20px;font-size:14px;font-weight:800;box-shadow:var(--shadow)}
+.go-panel:active{filter:brightness(1.08)}
+.to-map{display:none}
+@media (max-width:980px){
+  .go-panel.show{display:block}
+  .to-map{display:inline-block}
+}
 .credit{position:absolute;right:16px;bottom:12px;font-size:10.5px;color:var(--muted);opacity:.7}
 
 /* ---------- panel ---------- */
@@ -117,6 +126,15 @@ main{display:grid;grid-template-columns:minmax(0,1fr) 410px;gap:20px;align-items
 .stat{background:var(--surface2);border-radius:14px;padding:10px 6px;text-align:center}
 .stat b{display:block;font-size:20px;font-variant-numeric:tabular-nums;line-height:1.2}
 .stat span{font-size:11.5px;color:var(--muted)}
+button.stat:hover{box-shadow:inset 0 0 0 1.5px var(--accent)}
+.list-wrap{display:flex;flex-direction:column;gap:6px}
+.list-sub{font-size:11.5px;color:var(--muted);font-weight:800;letter-spacing:.06em;margin:10px 2px 2px}
+.list-item{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:12px;
+  border:1.5px solid var(--line);font-size:13.5px;text-align:left;background:var(--surface)}
+.list-item:hover{border-color:var(--accent)}
+.list-item.col{flex-direction:column;align-items:stretch;gap:2px}
+.li-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.li-sub{font-size:12px;color:var(--muted)}
 .hint{font-size:13.5px;color:var(--muted);margin:0 0 14px}
 .year-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:0 0 14px}
 .year-row>span{font-size:12px;color:var(--muted);font-weight:700;margin-right:2px}
@@ -315,6 +333,20 @@ main{display:grid;grid-template-columns:minmax(0,1fr) 410px;gap:20px;align-items
 <symbol id="st-shellfish" viewBox="0 0 40 40"><g filter="url(#crayon)"><path d="M20 30L8 15q1-6 12-6t12 6z" fill="#E8B892" stroke="#BF8A5E" stroke-width="1.4" stroke-linejoin="round"/><path d="M20 29L12 14M20 29l-1-15M20 29l8-15M20 29l1-15" stroke="#BF8A5E" stroke-width="1.1"/><path d="M9 34q5.5-3 11-1t11 1" fill="none" stroke="#8C7B62" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="3 3"/></g></symbol>
 <symbol id="st-kalguksu" viewBox="0 0 40 40"><g filter="url(#crayon)"><path d="M7 19h26a13 11 0 0 1-26 0z" fill="#FBF3E4" stroke="#C9B48C" stroke-width="1.4"/><path d="M10 15q5-4 10-2M13 12q5-3 10-1M17 9q5-2 9 1" fill="none" stroke="#E8DCC0" stroke-width="2.2" stroke-linecap="round"/><path d="M20 15q3-1 5 1" fill="none" stroke="#8FBF7F" stroke-width="1.6" stroke-linecap="round"/><path d="M8 10l5 7" stroke="#8C6B4A" stroke-width="1.6" stroke-linecap="round"/><path d="M13 16q-2 1-4-1" fill="none" stroke="#E8B892" stroke-width="1.8" stroke-linecap="round"/></g></symbol>
 <symbol id="st-bingsu" viewBox="0 0 40 40"><g filter="url(#crayon)"><path d="M12 22h16l-2.5 11h-11z" fill="#BEE3EC" stroke="#8FB5C9" stroke-width="1.4"/><path d="M11 22a9 8 0 0 1 18 0z" fill="#FFFDF8" stroke="#DCD2BE" stroke-width="1.2"/><circle cx="16" cy="17" r="2" fill="#9C6B4F"/><circle cx="21" cy="15" r="2" fill="#9C6B4F"/><circle cx="25" cy="18" r="2" fill="#9C6B4F"/><circle cx="20" cy="11" r="2.4" fill="#E2685A"/><path d="M30 12l-4 10" stroke="#8C6B4A" stroke-width="1.6" stroke-linecap="round"/></g></symbol>
+<symbol id="st-heart" viewBox="0 0 40 40"><g filter="url(#crayon)"><path d="M20 33C9.5 25.5 6.5 18.5 10 14c2.6-3.4 7.6-2.9 10 1.5 2.4-4.4 7.4-4.9 10-1.5 3.5 4.5.5 11.5-10 19z" fill="#F27E93" stroke="#D65C74" stroke-width="1.5" stroke-linejoin="round"/><circle cx="13.5" cy="16" r="1.8" fill="#FBC2CD"/><path d="M31 8l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8z" fill="#F6A9BF"/></g></symbol>
+<symbol id="st-star" viewBox="0 0 40 40"><g filter="url(#crayon)"><path d="M20 7l3.6 7.6 8.4 1.1-6.2 5.8 1.6 8.3L20 25.7l-7.4 4.1 1.6-8.3-6.2-5.8 8.4-1.1z" fill="#F5CB4C" stroke="#D9A72A" stroke-width="1.5" stroke-linejoin="round"/><circle cx="16.5" cy="15.5" r="1.5" fill="#FBE9A9"/><path d="M32 28l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7zM8 26l.6 1.5 1.5.6-1.5.6-.6 1.5-.6-1.5-1.5-.6 1.5-.6z" fill="#F2D989"/></g></symbol>
+<symbol id="st-maltese" viewBox="0 0 40 40"><g filter="url(#crayon)"><ellipse cx="10.5" cy="19" rx="3.8" ry="6.5" fill="#F6EFE3" stroke="#D9CDB4" stroke-width="1.2" transform="rotate(14 10.5 19)"/><ellipse cx="29.5" cy="19" rx="3.8" ry="6.5" fill="#F6EFE3" stroke="#D9CDB4" stroke-width="1.2" transform="rotate(-14 29.5 19)"/><circle cx="20" cy="21" r="9.5" fill="#FFFDF8" stroke="#D9CDB4" stroke-width="1.3"/><path d="M16.5 11l3.5 2 3.5-2-.7 4h-5.6z" fill="#F49FB4"/><circle cx="16.5" cy="20" r="1.3" fill="#4C4141"/><circle cx="23.5" cy="20" r="1.3" fill="#4C4141"/><circle cx="20" cy="23.5" r="1.6" fill="#4C4141"/><path d="M17.5 26.5q2.5 2 5 0" fill="none" stroke="#4C4141" stroke-width="1.2" stroke-linecap="round"/></g></symbol>
+<symbol id="st-jindo" viewBox="0 0 40 40"><g filter="url(#crayon)"><path d="M12.5 15l-2-8.5 7 4.5zM27.5 15l2-8.5-7 4.5z" fill="#F0DCA8" stroke="#CDB06E" stroke-width="1.3" stroke-linejoin="round"/><circle cx="20" cy="21" r="9.5" fill="#F0DCA8" stroke="#CDB06E" stroke-width="1.3"/><ellipse cx="20" cy="24.5" rx="5.5" ry="4" fill="#FFFDF8"/><circle cx="16" cy="19" r="1.3" fill="#4C4141"/><circle cx="24" cy="19" r="1.3" fill="#4C4141"/><circle cx="20" cy="23" r="1.6" fill="#4C4141"/><path d="M17.5 26q2.5 2 5 0" fill="none" stroke="#4C4141" stroke-width="1.2" stroke-linecap="round"/></g></symbol>
+<symbol id="st-shihtzu" viewBox="0 0 40 40"><g filter="url(#crayon)"><circle cx="20" cy="9.5" r="3" fill="#B5835A"/><path d="M17.5 12h5" stroke="#E98E7E" stroke-width="1.6" stroke-linecap="round"/><ellipse cx="10" cy="22" rx="4.2" ry="8" fill="#B5835A" stroke="#8C5B3A" stroke-width="1.2"/><ellipse cx="30" cy="22" rx="4.2" ry="8" fill="#B5835A" stroke="#8C5B3A" stroke-width="1.2"/><circle cx="20" cy="21" r="9" fill="#FFFDF8" stroke="#D9CDB4" stroke-width="1.3"/><circle cx="16.5" cy="20" r="1.3" fill="#4C4141"/><circle cx="23.5" cy="20" r="1.3" fill="#4C4141"/><ellipse cx="20" cy="23.5" rx="1.8" ry="1.3" fill="#4C4141"/><path d="M17.5 26.5q2.5 1.8 5 0" fill="none" stroke="#4C4141" stroke-width="1.2" stroke-linecap="round"/></g></symbol>
+<symbol id="st-poodle-br" viewBox="0 0 40 40"><g filter="url(#crayon)"><circle cx="14" cy="12" r="3.6" fill="#A9744F"/><circle cx="20" cy="9.5" r="4" fill="#A9744F"/><circle cx="26" cy="12" r="3.6" fill="#A9744F"/><ellipse cx="9.5" cy="22" rx="4.4" ry="7.5" fill="#A9744F" stroke="#7E5233" stroke-width="1.2"/><ellipse cx="30.5" cy="22" rx="4.4" ry="7.5" fill="#A9744F" stroke="#7E5233" stroke-width="1.2"/><circle cx="20" cy="21.5" r="8.8" fill="#A9744F" stroke="#7E5233" stroke-width="1.3"/><circle cx="16.5" cy="20" r="1.3" fill="#31241A"/><circle cx="23.5" cy="20" r="1.3" fill="#31241A"/><circle cx="20" cy="24" r="1.6" fill="#31241A"/><path d="M17.5 27q2.5 1.8 5 0" fill="none" stroke="#31241A" stroke-width="1.2" stroke-linecap="round"/></g></symbol>
+<symbol id="st-poodle-wh" viewBox="0 0 40 40"><g filter="url(#crayon)"><circle cx="14" cy="12" r="3.6" fill="#F7F3EC"/><circle cx="20" cy="9.5" r="4" fill="#F7F3EC"/><circle cx="26" cy="12" r="3.6" fill="#F7F3EC"/><ellipse cx="9.5" cy="22" rx="4.4" ry="7.5" fill="#F7F3EC" stroke="#D9CDB4" stroke-width="1.2"/><ellipse cx="30.5" cy="22" rx="4.4" ry="7.5" fill="#F7F3EC" stroke="#D9CDB4" stroke-width="1.2"/><circle cx="20" cy="21.5" r="8.8" fill="#F7F3EC" stroke="#D9CDB4" stroke-width="1.3"/><circle cx="16.5" cy="20" r="1.3" fill="#4C4141"/><circle cx="23.5" cy="20" r="1.3" fill="#4C4141"/><circle cx="20" cy="24" r="1.6" fill="#4C4141"/><path d="M17.5 27q2.5 1.8 5 0" fill="none" stroke="#4C4141" stroke-width="1.2" stroke-linecap="round"/></g></symbol>
+<symbol id="st-poodle-gr" viewBox="0 0 40 40"><g filter="url(#crayon)"><circle cx="14" cy="12" r="3.6" fill="#BDB7B0"/><circle cx="20" cy="9.5" r="4" fill="#BDB7B0"/><circle cx="26" cy="12" r="3.6" fill="#BDB7B0"/><ellipse cx="9.5" cy="22" rx="4.4" ry="7.5" fill="#BDB7B0" stroke="#8F8981" stroke-width="1.2"/><ellipse cx="30.5" cy="22" rx="4.4" ry="7.5" fill="#BDB7B0" stroke="#8F8981" stroke-width="1.2"/><circle cx="20" cy="21.5" r="8.8" fill="#BDB7B0" stroke="#8F8981" stroke-width="1.3"/><circle cx="16.5" cy="20" r="1.3" fill="#3A3530"/><circle cx="23.5" cy="20" r="1.3" fill="#3A3530"/><circle cx="20" cy="24" r="1.6" fill="#3A3530"/><path d="M17.5 27q2.5 1.8 5 0" fill="none" stroke="#3A3530" stroke-width="1.2" stroke-linecap="round"/></g></symbol>
+<symbol id="st-shiba" viewBox="0 0 40 40"><g filter="url(#crayon)"><path d="M12.5 15l-1.6-8 6.6 4zM27.5 15l1.6-8-6.6 4z" fill="#E8A25C" stroke="#C77E35" stroke-width="1.3" stroke-linejoin="round"/><circle cx="20" cy="21" r="9.5" fill="#E8A25C" stroke="#C77E35" stroke-width="1.3"/><ellipse cx="14" cy="25" rx="3.6" ry="3" fill="#FFFDF8"/><ellipse cx="26" cy="25" rx="3.6" ry="3" fill="#FFFDF8"/><ellipse cx="20" cy="24" rx="4" ry="3.2" fill="#FFFDF8"/><path d="M14.5 19q1.5-1.6 3 0M22.5 19q1.5-1.6 3 0" fill="none" stroke="#4C4141" stroke-width="1.3" stroke-linecap="round"/><circle cx="20" cy="22.5" r="1.5" fill="#4C4141"/><path d="M17.8 25.5q2.2 1.8 4.4 0" fill="none" stroke="#4C4141" stroke-width="1.2" stroke-linecap="round"/></g></symbol>
+<symbol id="st-corgi" viewBox="0 0 40 40"><g filter="url(#crayon)"><ellipse cx="12" cy="10.5" rx="4" ry="6" fill="#E8A25C" stroke="#C77E35" stroke-width="1.3" transform="rotate(-12 12 10.5)"/><ellipse cx="28" cy="10.5" rx="4" ry="6" fill="#E8A25C" stroke="#C77E35" stroke-width="1.3" transform="rotate(12 28 10.5)"/><circle cx="20" cy="22" r="9.5" fill="#E8A25C" stroke="#C77E35" stroke-width="1.3"/><path d="M16.8 13.5h6.4l-1.2 8h-4z" fill="#FFFDF8"/><ellipse cx="20" cy="25" rx="5" ry="3.6" fill="#FFFDF8"/><circle cx="15.5" cy="20" r="1.3" fill="#4C4141"/><circle cx="24.5" cy="20" r="1.3" fill="#4C4141"/><circle cx="20" cy="23.5" r="1.5" fill="#4C4141"/><path d="M17.8 26.5q2.2 1.8 4.4 0" fill="none" stroke="#4C4141" stroke-width="1.2" stroke-linecap="round"/></g></symbol>
+<symbol id="st-golden" viewBox="0 0 40 40"><g filter="url(#crayon)"><ellipse cx="10.5" cy="20" rx="4" ry="7" fill="#C69A45" stroke="#A5792C" stroke-width="1.2"/><ellipse cx="29.5" cy="20" rx="4" ry="7" fill="#C69A45" stroke="#A5792C" stroke-width="1.2"/><circle cx="20" cy="21" r="9.5" fill="#DFB566" stroke="#B08A3C" stroke-width="1.3"/><ellipse cx="20" cy="24.5" rx="5" ry="3.8" fill="#EFD9A8"/><circle cx="16" cy="19" r="1.3" fill="#4C4141"/><circle cx="24" cy="19" r="1.3" fill="#4C4141"/><circle cx="20" cy="23" r="1.6" fill="#4C4141"/><path d="M20 24.5q0 2 -2 2.4M20 24.5q0 2 2 2.4" fill="none" stroke="#4C4141" stroke-width="1.1" stroke-linecap="round"/></g></symbol>
+<symbol id="st-pome" viewBox="0 0 40 40"><g filter="url(#crayon)"><path d="M13.5 12l-1.5-5 5 2.4zM26.5 12l1.5-5-5 2.4z" fill="#F0B36A" stroke="#CE8B3B" stroke-width="1.2" stroke-linejoin="round"/><circle cx="20" cy="21" r="11" fill="#F0B36A" stroke="#CE8B3B" stroke-width="1.3"/><circle cx="11" cy="25" r="3.4" fill="#F0B36A" stroke="#CE8B3B" stroke-width="1"/><circle cx="29" cy="25" r="3.4" fill="#F0B36A" stroke="#CE8B3B" stroke-width="1"/><circle cx="20" cy="30" r="3.4" fill="#F0B36A" stroke="#CE8B3B" stroke-width="1"/><circle cx="20" cy="20" r="6.8" fill="#F7C98B"/><circle cx="17.3" cy="19" r="1.2" fill="#4C4141"/><circle cx="22.7" cy="19" r="1.2" fill="#4C4141"/><circle cx="20" cy="22" r="1.4" fill="#4C4141"/><path d="M18 24.4q2 1.6 4 0" fill="none" stroke="#4C4141" stroke-width="1.1" stroke-linecap="round"/></g></symbol>
+<symbol id="st-bichon" viewBox="0 0 40 40"><g filter="url(#crayon)"><circle cx="20" cy="21" r="10" fill="#FFFDF8" stroke="#D9CDB4" stroke-width="1.3"/><circle cx="12" cy="14" r="4" fill="#FFFDF8" stroke="#D9CDB4" stroke-width="1"/><circle cx="28" cy="14" r="4" fill="#FFFDF8" stroke="#D9CDB4" stroke-width="1"/><circle cx="20" cy="10.5" r="4.4" fill="#FFFDF8" stroke="#D9CDB4" stroke-width="1"/><circle cx="10" cy="23" r="3.4" fill="#FFFDF8" stroke="#D9CDB4" stroke-width="1"/><circle cx="30" cy="23" r="3.4" fill="#FFFDF8" stroke="#D9CDB4" stroke-width="1"/><circle cx="16.5" cy="20.5" r="1.3" fill="#4C4141"/><circle cx="23.5" cy="20.5" r="1.3" fill="#4C4141"/><circle cx="20" cy="24" r="1.6" fill="#4C4141"/><path d="M17.5 26.8q2.5 1.8 5 0" fill="none" stroke="#4C4141" stroke-width="1.2" stroke-linecap="round"/></g></symbol>
+<symbol id="st-dachs" viewBox="0 0 40 40"><g filter="url(#crayon)"><ellipse cx="10.5" cy="21" rx="3.8" ry="8" fill="#6E4426" stroke="#4E2E17" stroke-width="1.2"/><ellipse cx="29.5" cy="21" rx="3.8" ry="8" fill="#6E4426" stroke="#4E2E17" stroke-width="1.2"/><circle cx="20" cy="21" r="9.5" fill="#8C5B3A" stroke="#5F3A20" stroke-width="1.3"/><ellipse cx="20" cy="25" rx="4.6" ry="3.4" fill="#D9A778"/><circle cx="15.6" cy="15.5" r="1" fill="#D9A778"/><circle cx="24.4" cy="15.5" r="1" fill="#D9A778"/><circle cx="16" cy="19.5" r="1.3" fill="#31241A"/><circle cx="24" cy="19.5" r="1.3" fill="#31241A"/><circle cx="20" cy="23.5" r="1.6" fill="#31241A"/><path d="M18 26.6q2 1.6 4 0" fill="none" stroke="#31241A" stroke-width="1.1" stroke-linecap="round"/></g></symbol>
 <clipPath id="stampClip"><circle cx="0" cy="0" r="19.5"/></clipPath>
 </defs>
 </svg>
@@ -358,6 +390,7 @@ main{display:grid;grid-template-columns:minmax(0,1fr) 410px;gap:20px;align-items
         </g>
       </svg>
       <div id="tooltip" class="tooltip hidden"></div>
+      <button id="goPanelBtn" class="go-panel">기록 쓰기 ↓</button>
       <span class="map-note">지역을 누르면 확대 · 색과 스탬프로 꾸며보세요</span>
       <span class="credit">경계: 통계청(KOSTAT) 2018</span>
     </section>
@@ -402,7 +435,12 @@ const STAMPS = {
   mural:{l:'벽화마을',c:'풍경'},
   chicken:{l:'치킨',c:'음식'}, tteokbokki:{l:'떡볶이',c:'음식'}, hotteok:{l:'호떡',c:'음식'},
   jeon:{l:'전·막걸리',c:'음식'}, hanwoo:{l:'한우',c:'음식'}, shellfish:{l:'조개구이',c:'음식'},
-  kalguksu:{l:'칼국수',c:'음식'}, bingsu:{l:'팥빙수',c:'음식'}
+  kalguksu:{l:'칼국수',c:'음식'}, bingsu:{l:'팥빙수',c:'음식'},
+  heart:{l:'하트',c:'스티커'}, star:{l:'별',c:'스티커'},
+  maltese:{l:'말티즈',c:'스티커'}, jindo:{l:'진돗개',c:'스티커'}, shihtzu:{l:'시츄',c:'스티커'},
+  'poodle-br':{l:'푸들(갈색)',c:'스티커'}, 'poodle-wh':{l:'푸들(흰색)',c:'스티커'}, 'poodle-gr':{l:'푸들(회색)',c:'스티커'},
+  shiba:{l:'시바견',c:'스티커'}, corgi:{l:'웰시코기',c:'스티커'}, golden:{l:'골든리트리버',c:'스티커'},
+  pome:{l:'포메라니안',c:'스티커'}, bichon:{l:'비숑',c:'스티커'}, dachs:{l:'닥스훈트',c:'스티커'}
 };
 const PASTELS = ['#F9CFCB','#FAD9B8','#F6E7A9','#DDEBB2','#BFE6CB','#BEE3EC',
                  '#C5D4F2','#D7CBF0','#EFC9E2','#E7D8C5','#CFE0D8','#E3E0EE'];
@@ -578,16 +616,15 @@ function zoomToBBox(bb, padF){
   curScale = s;
 }
 function selectProv(p){
-  level = 'prov'; provSel = p; muniSel = null;
+  level = 'prov'; provSel = p; muniSel = null; panelMode = null;
   zoomToBBox(provPathEls[p].getBBox(), 0.12);
   afterViewChange(); renderPanel();
 }
 function selectMuni(code){
-  level = 'muni'; muniSel = code; provSel = MUNIS[code].p;
+  if(!MUNIS[code]){ if(PROVS[code]) selectProv(code); return; }
+  level = 'muni'; muniSel = code; provSel = MUNIS[code].p; panelMode = null;
   zoomToBBox(bboxOf(code), 0.55);
   afterViewChange(); renderPanel();
-  if(window.innerWidth<=980)
-    document.getElementById('panel').scrollIntoView({behavior:'smooth',block:'start'});
 }
 function goCountry(){
   level = 'country'; provSel = null; muniSel = null; curScale = 1;
@@ -596,9 +633,21 @@ function goCountry(){
 }
 document.getElementById('upBtn').addEventListener('click', goUp);
 document.getElementById('yearChip').addEventListener('click', ()=>setYearFilter(null));
+function scrollToEl(el){
+  const y = el.getBoundingClientRect().top + window.scrollY - 8;
+  window.scrollTo({top:y, behavior:'smooth'});
+  setTimeout(()=>{
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    const target = Math.max(0, Math.min(y, max));
+    if(Math.abs(window.scrollY - target) > 40) window.scrollTo(0, target);
+  }, 400);
+}
+document.getElementById('goPanelBtn').addEventListener('click', ()=>
+  scrollToEl(document.getElementById('panel')));
 
 function afterViewChange(){
   document.getElementById('upBtn').classList.toggle('hidden', level==='country');
+  document.getElementById('goPanelBtn').classList.toggle('show', level==='muni');
   tooltip.classList.add('hidden');
   paintMap(); updateLabels(); updateStampScale();
 }
@@ -742,11 +791,13 @@ function totals(){
 function provVisitedCount(p){
   return Object.keys(MUNIS).filter(c=>MUNIS[c].p===p && isVisited(c)).length;
 }
+let panelMode = null; // null=홈 | munis/trips/places/photos=모아보기
 function renderPanel(){
-  if(level==='country') renderCountry();
+  if(level==='country'){ if(panelMode) renderListView(panelMode); else renderCountry(); }
   else if(level==='prov') renderProv();
   else renderMuni(muniSel);
 }
+function regionLabel(c){ return MUNIS[c] ? MUNIS[c].n : (PROVS[c] ? PROVS[c].n : ''); }
 
 function renderCountry(){
   const t = totals();
@@ -770,18 +821,97 @@ function renderCountry(){
   panel.innerHTML =
     '<div class="panel-head"><h2>어디어디?!</h2></div>'+
     '<div class="stats">'+
-      '<div class="stat"><b>'+munisVisited+'</b><span>'+(yearFilter? yearFilter+' 방문':'방문 시·군·구')+'</span></div>'+
-      '<div class="stat"><b>'+tripsShown+'</b><span>여행 기록</span></div>'+
-      '<div class="stat"><b>'+t.places+'</b><span>맛집·명소</span></div>'+
-      '<div class="stat"><b>'+t.photos+'</b><span>사진</span></div>'+
+      '<button class="stat" data-stat="munis"><b>'+munisVisited+'</b><span>'+(yearFilter? yearFilter+' 방문':'방문 시·군·구')+'</span></button>'+
+      '<button class="stat" data-stat="trips"><b>'+tripsShown+'</b><span>여행 기록</span></button>'+
+      '<button class="stat" data-stat="places"><b>'+t.places+'</b><span>맛집·명소</span></button>'+
+      '<button class="stat" data-stat="photos"><b>'+t.photos+'</b><span>사진</span></button>'+
     '</div>'+
     yearRow+
-    '<p class="hint">지도에서 지역을 누르면 확대돼요. 시·군·구를 골라 파스텔색을 칠하고, 스탬프나 내 사진을 붙여보세요.</p>'+
+    '<p class="hint">숫자를 누르면 전체 목록이 쫙 나와요. 지도에서 지역을 눌러 색을 칠하고, 스탬프나 내 사진을 붙여보세요.</p>'+
     '<div class="prov-grid">'+grid+'</div>';
   panel.querySelectorAll('[data-go]').forEach(b=>
     b.addEventListener('click', ()=>selectProv(b.dataset.go)));
   panel.querySelectorAll('.ychip').forEach(b=>
     b.addEventListener('click', ()=>setYearFilter(b.dataset.y)));
+  panel.querySelectorAll('[data-stat]').forEach(b=>
+    b.addEventListener('click', ()=>renderListView(b.dataset.stat)));
+}
+
+/* ---------- 모아보기 ---------- */
+function renderListView(kind){
+  panelMode = kind;
+  const titles = {munis:'방문한 시·군·구', trips:'여행 기록 모아보기', places:'맛집·명소 모아보기', photos:'사진 모아보기'};
+  let body = '';
+  if(kind==='munis'){
+    let rows = '';
+    for(const p of PROV_ORDER){
+      const ms = Object.keys(MUNIS).filter(c=>MUNIS[c].p===p && isVisited(c))
+        .sort((a,b)=>MUNIS[a].n.localeCompare(MUNIS[b].n,'ko'));
+      if(!ms.length) continue;
+      rows += '<div class="list-sub">'+esc(PROVS[p]?PROVS[p].n:PROV_SHORT[p])+'</div>';
+      for(const c of ms){
+        const r = store.regions[c] || blankRegion();
+        const cnt = r.trips.length + r.places.length + photosOf(c).length;
+        rows += '<button class="list-item" data-go-muni="'+c+'"><i class="dot" style="background:'+
+          ((r&&r.color)||'var(--accent)')+';border-color:transparent"></i>'+esc(MUNIS[c].n)+
+          '<span class="cnt">'+(cnt? cnt+'건':'')+'</span></button>';
+      }
+    }
+    body = rows || '<div class="empty">아직 방문한 곳이 없어요</div>';
+  }else if(kind==='trips'){
+    const all = [];
+    for(const [c, r] of Object.entries(store.regions))
+      for(const t of r.trips){
+        if(yearFilter && !(t.date||'').startsWith(yearFilter)) continue;
+        if(MUNIS[c]||PROVS[c]) all.push({c, t});
+      }
+    all.sort((a,b)=>(b.t.date||'').localeCompare(a.t.date||''));
+    body = all.length ? all.map(({c, t})=>
+      '<button class="list-item col" data-go-muni="'+c+'">'+
+        '<span class="li-top"><b>'+esc(t.title||'여행')+'</b><span class="cnt">'+(t.date?fmtDate(t.date):'')+'</span></span>'+
+        '<span class="li-sub">'+esc(regionLabel(c))+(t.memo?' · '+esc(t.memo.length>40?t.memo.slice(0,40)+'…':t.memo):'')+'</span>'+
+      '</button>').join('')
+      : '<div class="empty">아직 여행 기록이 없어요</div>';
+  }else if(kind==='places'){
+    const all = [];
+    for(const [c, r] of Object.entries(store.regions))
+      for(const pl of r.places){ if(MUNIS[c]||PROVS[c]) all.push({c, pl}); }
+    body = all.length ? all.map(({c, pl})=>{
+      const q = encodeURIComponent(regionLabel(c)+' '+pl.name);
+      return '<div class="item">'+
+        '<div class="t"><span class="badge-food">'+esc(pl.cat||'맛집')+'</span>'+esc(pl.name)+'</div>'+
+        (pl.rating?'<div class="stars">'+'★'.repeat(pl.rating)+'<span style="opacity:.3">'+'★'.repeat(5-pl.rating)+'</span></div>':'')+
+        '<div class="li-sub" style="margin-top:2px">'+esc(regionLabel(c))+'</div>'+
+        (pl.memo?'<div class="m">'+esc(pl.memo)+'</div>':'')+
+        '<div class="links">'+
+          '<a class="lchip" target="_blank" rel="noopener" href="https://map.naver.com/p/search/'+q+'">네이버지도</a>'+
+          '<a class="lchip" target="_blank" rel="noopener" href="https://map.kakao.com/?q='+q+'">카카오맵</a>'+
+          '<button class="lchip" data-go-muni="'+c+'">지역 보기</button>'+
+        '</div></div>'; }).join('')
+      : '<div class="empty">저장한 맛집·명소가 없어요</div>';
+  }else{ // photos
+    const all = [];
+    for(const [c, arr] of Object.entries(photoCache))
+      for(const ph of arr){ if(MUNIS[c]||PROVS[c]) all.push({c, ph}); }
+    all.sort((a,b)=>b.ph.ts-a.ph.ts);
+    body = all.length ? '<div class="photo-grid">'+all.map(({c, ph})=>
+      '<button data-lb="'+c+'|'+ph.id+'"><img src="'+ph.data+'" alt="'+esc(ph.caption||regionLabel(c)+' 사진')+'" loading="lazy"></button>').join('')+'</div>'
+      : '<div class="empty">아직 사진이 없어요</div>';
+  }
+  panel.innerHTML =
+    '<div class="panel-head">'+
+      '<button class="back-btn" id="backBtn" aria-label="뒤로">←</button>'+
+      '<div><h2>'+titles[kind]+'</h2>'+
+      (yearFilter && (kind==='munis'||kind==='trips') ? '<span class="crumb">'+yearFilter+'년 기준</span>' : '')+
+      '</div></div>'+
+    '<div class="list-wrap">'+body+'</div>';
+  document.getElementById('backBtn').addEventListener('click', ()=>{ panelMode = null; renderCountry(); });
+  panel.querySelectorAll('[data-go-muni]').forEach(b=>
+    b.addEventListener('click', ()=>selectMuni(b.dataset.goMuni)));
+  panel.querySelectorAll('[data-lb]').forEach(b=>b.addEventListener('click', ()=>{
+    const i = b.dataset.lb.indexOf('|');
+    openLightbox(b.dataset.lb.slice(0,i), b.dataset.lb.slice(i+1));
+  }));
 }
 
 function renderProv(){
@@ -846,12 +976,15 @@ function renderMuni(code){
       '<button class="back-btn" id="backBtn" aria-label="뒤로">←</button>'+
       '<div><h2>'+esc(m.n)+'</h2><span class="crumb">'+esc(PROVS[m.p]?PROVS[m.p].n:'')+'</span></div>'+
       '<label class="visit-toggle'+(r.visited?' on':'')+'"><input type="checkbox" id="visitedChk"'+(r.visited?' checked':'')+'> 방문했어요</label>'+
+      '<button class="add-btn to-map" id="toMapBtn">지도 ↑</button>'+
     '</div>'+
     '<div class="deco-row"><h4>바탕색 칠하기</h4><div class="swatches" id="swatches">'+sw+'</div></div>'+
     '<div class="deco-row"><h4>대표 스탬프</h4><div class="stamp-cur">'+stampCur+'</div></div>'+
     sectionsHTML(code, r, false);
 
   document.getElementById('backBtn').addEventListener('click', ()=>selectProv(m.p));
+  document.getElementById('toMapBtn').addEventListener('click', ()=>
+    scrollToEl(document.querySelector('.map-wrap')));
   const chk = document.getElementById('visitedChk');
   chk.addEventListener('change', ()=>{
     r.visited = chk.checked; saveStore(); paintMap();
@@ -1047,7 +1180,7 @@ function openStampModal(code){
         '<div class="modal-head"><h3>'+esc(MUNIS[code].n)+' 대표 스탬프</h3>'+
         '<button class="x" id="stM-x" aria-label="닫기">✕</button></div>'+
         '<div class="tabs">'+
-          ['풍경','음식','내 사진'].map(c=>'<button data-cat="'+c+'"'+(cat===c?' class="on"':'')+'>'+c+'</button>').join('')+
+          ['풍경','음식','스티커','내 사진'].map(c=>'<button data-cat="'+c+'"'+(cat===c?' class="on"':'')+'>'+c+'</button>').join('')+
         '</div>'+content+
       '</div>';
     stampModal.querySelector('#stM-x').addEventListener('click', closeStampModal);
