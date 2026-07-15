@@ -752,7 +752,28 @@ function muniClick(code){
   if(level==='country' || p!==provSel) selectProv(p);
   else selectMuni(code);
 }
+/* 뒤로가기(브라우저 히스토리) 연동: 시군구→도→전국→종료 순서로 */
+let navSuppress = false, navDepth = 0; // 0 전국, 1 도/다른탭, 2 시군구
+function navPush(state, depth){
+  if(navSuppress) return;
+  try{
+    if(depth > navDepth) history.pushState(state, '');
+    else history.replaceState(state, '');
+  }catch(e){}
+  navDepth = depth;
+}
+window.addEventListener('popstate', e=>{
+  const s = e.state;
+  navSuppress = true;
+  try{
+    if(!s){ navDepth = 0; if(currentTab!=='map') switchTab('map'); goCountry(); }
+    else if(s.v==='tab'){ navDepth = 1; switchTab(s.tab); }
+    else if(s.v==='prov'){ navDepth = 1; if(currentTab!=='map') switchTab('map'); selectProv(s.p); }
+    else if(s.v==='muni'){ navDepth = 2; if(currentTab!=='map') switchTab('map'); selectMuni(s.c); }
+  }finally{ navSuppress = false; }
+});
 function goUp(){
+  if(navDepth>0){ history.back(); return; }
   if(level==='muni') selectProv(provSel);
   else if(level==='prov') goCountry();
 }
@@ -765,12 +786,18 @@ function zoomToBBox(bb, padF){
 }
 function selectProv(p){
   level = 'prov'; provSel = p; muniSel = null; panelMode = null;
+  navPush({v:'prov', p:p}, 1);
   zoomToBBox(provPathEls[p].getBBox(), 0.12);
   afterViewChange(); renderPanel();
 }
 function selectMuni(code){
   if(!MUNIS[code]){ if(PROVS[code]) selectProv(code); return; }
   level = 'muni'; muniSel = code; provSel = MUNIS[code].p; panelMode = null;
+  if(!navSuppress && navDepth===0){
+    try{ history.pushState({v:'prov', p:provSel}, ''); }catch(e){}
+    navDepth = 1;
+  }
+  navPush({v:'muni', c:code}, 2);
   zoomToBBox(bboxOf(code), 0.55);
   afterViewChange(); renderPanel();
 }
@@ -1109,7 +1136,7 @@ function renderProv(){
     '<p class="hint">시·군·구를 선택해서 색을 칠하고 기록을 남겨보세요.</p>'+
     '<div class="muni-grid">'+grid+'</div>'+
     (hasLegacy ? '<div id="legacySects"></div>' : '');
-  document.getElementById('backBtn').addEventListener('click', goCountry);
+  document.getElementById('backBtn').addEventListener('click', goUp);
   panel.querySelectorAll('[data-go]').forEach(b=>
     b.addEventListener('click', ()=>selectMuni(b.dataset.go)));
   if(hasLegacy){
@@ -1150,7 +1177,7 @@ function renderMuni(code){
     '<div class="deco-row"><h4>대표 스탬프</h4><div class="stamp-cur">'+stampCur+'</div></div>'+
     sectionsHTML(code, r, false);
 
-  document.getElementById('backBtn').addEventListener('click', ()=>selectProv(m.p));
+  document.getElementById('backBtn').addEventListener('click', goUp);
   document.getElementById('toMapBtn').addEventListener('click', ()=>
     scrollToEl(document.querySelector('.map-wrap')));
   const chk = document.getElementById('visitedChk');
@@ -1681,7 +1708,17 @@ function switchTab(t){
   window.scrollTo(0,0);
 }
 document.querySelectorAll('.tabbar button').forEach(b=>
-  b.addEventListener('click', ()=>switchTab(b.dataset.tab)));
+  b.addEventListener('click', ()=>{
+    const t = b.dataset.tab;
+    if(t==='map'){
+      if(currentTab==='map') return;
+      if(navDepth>0) history.back();   // 탭 → 지도: 히스토리도 함께 되돌리기
+      else switchTab('map');
+      return;
+    }
+    switchTab(t);
+    navPush({v:'tab', tab:t}, 1);
+  }));
 
 function isVisitedRaw(code){
   const r = store.regions[code];
