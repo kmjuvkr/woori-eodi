@@ -45,6 +45,13 @@ header::after{content:'';position:absolute;left:0;right:0;bottom:0;height:3px;
 .eyebrow{font-size:11px;letter-spacing:.24em;color:var(--muted);font-weight:700}
 h1{margin:2px 0 0;font-size:clamp(23px,3.4vw,30px);font-weight:800;letter-spacing:-.02em;text-wrap:balance}
 h1 .squig{display:block;width:150px;height:7px;margin-top:2px}
+.title-edit{font-size:15px;color:var(--muted);margin-left:6px;width:28px;height:28px;
+  border-radius:8px;vertical-align:4px}
+.title-edit:hover{color:var(--accent);background:var(--surface2)}
+.title-input{font:inherit;font-weight:800;letter-spacing:-.02em;color:var(--ink);
+  background:var(--surface);border:2px dashed var(--accent);border-radius:10px;
+  padding:0 8px;width:min(240px,60vw)}
+.title-input:focus{outline:none}
 h1 .squig path{stroke:var(--accent);stroke-width:2.5;fill:none;stroke-linecap:round}
 .head-right{display:flex;align-items:center;gap:14px}
 .progress{text-align:right}
@@ -355,7 +362,7 @@ button.stat:hover{box-shadow:inset 0 0 0 1.5px var(--accent)}
   <header>
     <div class="brand">
       <span class="eyebrow">우리 어디 가봤지? · KOREA TRAVEL LOG</span>
-      <h1>우리어디
+      <h1><span id="appTitle">우리어디</span><button class="title-edit" id="titleEditBtn" title="대표 이름 바꾸기" aria-label="대표 이름 바꾸기">✎</button>
         <svg class="squig" viewBox="0 0 150 7" aria-hidden="true"><path d="M2 4q9-5 18 0t18 0 18 0 18 0 18 0 18 0 18 0 18 0"/></svg>
       </h1>
     </div>
@@ -1324,6 +1331,37 @@ document.addEventListener('keydown', ev=>{
   }
 });
 
+/* ================= 대표 이름 바꾸기 ================= */
+const DEFAULT_TITLE = '우리어디';
+function applyTitle(){
+  const t = store.title || DEFAULT_TITLE;
+  document.getElementById('appTitle').textContent = t;
+  document.title = t;
+}
+document.getElementById('titleEditBtn').addEventListener('click', ()=>{
+  if(document.getElementById('titleInput')) return;
+  const span = document.getElementById('appTitle');
+  const cur = store.title || DEFAULT_TITLE;
+  const inp = document.createElement('input');
+  inp.id = 'titleInput'; inp.className = 'title-input';
+  inp.value = cur; inp.maxLength = 16;
+  span.replaceWith(inp);
+  inp.focus(); inp.select();
+  const done = ()=>{
+    const v = inp.value.trim();
+    store.title = (v && v!==DEFAULT_TITLE) ? v : null;
+    saveStore();
+    const s = document.createElement('span'); s.id = 'appTitle';
+    inp.replaceWith(s); applyTitle();
+    if(v && v!==cur) toast('대표 이름을 바꿨어요');
+  };
+  inp.addEventListener('keydown', e=>{
+    if(e.key==='Enter') inp.blur();
+    if(e.key==='Escape'){ inp.value = cur; inp.blur(); }
+  });
+  inp.addEventListener('blur', done);
+});
+
 /* ================= 메뉴: 백업/복원/초기화 ================= */
 const menu = document.getElementById('menu');
 document.getElementById('menuBtn').addEventListener('click', ev=>{
@@ -1336,7 +1374,7 @@ document.getElementById('exportBtn').addEventListener('click', ()=>{
   for(const arr of Object.values(photoCache)) photos.push(...arr);
   photos.push(...Object.values(stampRecs));
   const payload = {app:'ktravel', version:2, exportedAt:new Date().toISOString(),
-    regions:store.regions, photos};
+    title:store.title||null, regions:store.regions, photos};
   const blob = new Blob([JSON.stringify(payload)], {type:'application/json'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
@@ -1360,8 +1398,8 @@ document.getElementById('importInput').addEventListener('change', async ev=>{
       const nk = V1MAP[k] || k;
       regions[nk] = Object.assign(blankRegion(), v);
     }
-    store = {regions, migrated:true};
-    saveStore();
+    store = {regions, migrated:true, title:data.title||null};
+    saveStore(); applyTitle();
     await clearPhotos();
     for(const p of (data.photos||[])){
       p.region = V1MAP[p.region] || p.region;
@@ -1375,7 +1413,7 @@ document.getElementById('importInput').addEventListener('change', async ev=>{
 });
 document.getElementById('resetBtn').addEventListener('click', async ()=>{
   if(!confirm('모든 여행 기록·맛집·사진·색·스탬프가 삭제됩니다. 정말 초기화할까요?')) return;
-  store = {regions:{}, migrated:true}; saveStore();
+  store = {regions:{}, migrated:true}; saveStore(); applyTitle();
   await clearPhotos(); photoCache = {}; stampRecs = {};
   rebuildStamps(); setYearFilter(null); goCountry(); toast('초기화했어요');
 });
@@ -1392,6 +1430,7 @@ function toast(msg){
 
 /* ================= 시작 ================= */
 (async function init(){
+  applyTitle();
   await loadPhotos();
   rebuildStamps();
   paintMap();
