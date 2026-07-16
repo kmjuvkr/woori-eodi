@@ -1,0 +1,17 @@
+{
+  "name": "우리어디 — 우리의 국내여행 지도",
+  "short_name": "우리어디",
+  "description": "우리 어디 가봤지? 다녀온 국내여행을 파스텔 스티커북으로 채워요.",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FBF6ED",
+  "theme_color": "#FBF6ED",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

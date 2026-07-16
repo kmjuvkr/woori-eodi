@@ -1,4 +1,4 @@
-<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"></head><body><title>우리어디</title>
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#FBF6ED"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" type="image/png" href="icon-192.png"><link rel="apple-touch-icon" href="icon-192.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="우리어디"></head><body><title>우리어디</title>
 <style>
 :root{
   --bg:#FBF6ED; --surface:#FFFFFF; --surface2:#F6EEDF; --ink:#4C4136; --muted:#96887A;
@@ -78,6 +78,7 @@ header::after{content:'';position:absolute;left:0;right:0;bottom:0;height:3px;
 .eyebrow{font-size:11px;letter-spacing:.24em;color:var(--muted);font-weight:700}
 h1{margin:2px 0 0;font-size:clamp(23px,3.4vw,30px);font-weight:800;letter-spacing:-.02em;text-wrap:balance}
 h1 .squig{display:block;width:150px;height:7px;margin-top:2px}
+.tagline{font-size:12.5px;color:var(--muted);margin:7px 0 0}
 .title-edit{font-size:15px;color:var(--muted);margin-left:6px;width:28px;height:28px;
   border-radius:8px;vertical-align:4px}
 .title-edit:hover{color:var(--accent);background:var(--surface2)}
@@ -463,6 +464,7 @@ body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
       <h1><span id="appTitle">우리어디</span><button class="title-edit" id="titleEditBtn" title="대표 이름 바꾸기" aria-label="대표 이름 바꾸기">✎</button>
         <svg class="squig" viewBox="0 0 150 7" aria-hidden="true"><path d="M2 4q9-5 18 0t18 0 18 0 18 0 18 0 18 0 18 0 18 0"/></svg>
       </h1>
+      <p class="tagline">지역을 누르면 확대 · 색과 스탬프로 꾸며보세요</p>
     </div>
     <div class="head-right">
       <div class="progress">
@@ -488,7 +490,6 @@ body{padding-bottom:calc(76px + env(safe-area-inset-bottom))}
       </svg>
       <div id="tooltip" class="tooltip hidden"></div>
       <button id="goPanelBtn" class="go-panel">기록 쓰기 ↓</button>
-      <span class="map-note">지역을 누르면 확대 · 색과 스탬프로 꾸며보세요</span>
       <span class="credit">경계: 통계청(KOSTAT) 2018</span>
     </section>
 
@@ -869,6 +870,9 @@ function updateLabels(){
   const show = (level!=='country') && curScale>=1.5;
   for(const el of Object.values(labelEls)) el.style.opacity = 0;
   if(!show) return;
+  // 화면에 실제 보이는 크기 기준으로 글자 크기 계산 (폰에서도 동일하게 보이도록)
+  const cssScale = (svg.clientWidth || MAP_W) / MAP_W;
+  const fs = 11 / cssScale / curScale;
   for(const [code, m] of Object.entries(MUNIS)){
     if(m.p!==provSel) continue;
     let el = labelEls[code];
@@ -881,10 +885,11 @@ function updateLabels(){
       labelsG.appendChild(el);
       labelEls[code] = el;
     }
-    el.setAttribute('font-size', (12.5/curScale).toFixed(2));
+    el.setAttribute('font-size', fs.toFixed(2));
     el.style.opacity = 1;
   }
 }
+window.addEventListener('resize', ()=>{ if(level!=='country') updateLabels(); });
 
 /* ---------- 스탬프 ---------- */
 const stampEls = {};
@@ -1899,6 +1904,10 @@ function toast(msg){
   rebuildStamps();
   paintMap();
   renderPanel();
+  // PWA: 홈 화면 설치용 서비스워커 (https/localhost에서만)
+  if('serviceWorker' in navigator && /^https?:$/.test(location.protocol)){
+    try{ navigator.serviceWorker.register('sw.js').catch(()=>{}); }catch(e){}
+  }
 })();
 </script>
 </body></html>
