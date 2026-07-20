@@ -121,8 +121,10 @@ main{display:grid;grid-template-columns:minmax(0,1fr) 410px;gap:20px;align-items
   transition:fill .3s ease,opacity .45s ease}
 #mapG .muni.visited{fill:var(--map-visited)}
 #mapG .muni:hover{filter:brightness(1.05) saturate(1.12)}
+#mapG .muni:focus,#mapG .muni:focus-visible{outline:none}
 #mapG .muni.dim{opacity:.16}
-#mapG .muni.sel{stroke:var(--accent);stroke-width:1.2}
+#mapG .muni.sel{stroke:var(--accent);stroke-width:2.4;vector-effect:non-scaling-stroke;
+  stroke-linejoin:round}
 #provG path{fill:none;stroke:var(--prov-stroke);stroke-width:1.4;pointer-events:none;
   transition:opacity .45s ease}
 #stampsG{pointer-events:none}
@@ -857,6 +859,8 @@ function paintMap(){
     p.classList.toggle('dim', !!provSel && MUNIS[code].p!==provSel);
     p.classList.toggle('sel', code===muniSel);
   }
+  // 선택 지역을 맨 위로 올려 경계선이 이웃 지역에 가려지지 않게
+  if(muniSel && pathEls[muniSel]) muniG.appendChild(pathEls[muniSel]);
   const munisVisited = Object.keys(MUNIS).filter(isVisited).length;
   const provsVisited = new Set(Object.keys(MUNIS).filter(isVisited).map(c=>MUNIS[c].p)).size;
   document.getElementById('visitedCount').textContent = munisVisited;
