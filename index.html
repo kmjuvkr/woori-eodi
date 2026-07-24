@@ -1150,10 +1150,10 @@ function renderListView(kind){
       rows += '<div class="list-sub">'+esc(PROVS[p]?PROVS[p].n:PROV_SHORT[p])+'</div>';
       for(const c of ms){
         const r = store.regions[c] || blankRegion();
-        const cnt = r.trips.length + r.places.length + photosOf(c).length;
+        const cnt = r.trips.length;
         rows += '<button class="list-item" data-go-muni="'+c+'"><i class="dot" style="background:'+
           ((r&&r.color)||'var(--accent)')+';border-color:transparent"></i>'+esc(MUNIS[c].n)+
-          '<span class="cnt">'+(cnt? cnt+'건':'')+'</span></button>';
+          '<span class="cnt">'+(cnt? cnt+'회':'')+'</span></button>';
       }
     }
     body = rows || '<div class="empty">아직 방문한 곳이 없어요</div>';
@@ -1221,14 +1221,14 @@ function renderProv(){
   let grid = '';
   for(const [code, m] of munis){
     const r = store.regions[code];
-    const cnt = r ? r.trips.length + r.places.length + photosOf(code).length : 0;
+    const cnt = r ? r.trips.length : 0;
     const stampSvg = (r && r.stamp) ?
       (r.stamp==='@photo' && stampRecs[code]
         ? '<img class="mini-stamp" src="'+stampRecs[code].data+'" alt="" style="border-radius:50%;object-fit:cover">'
         : (STAMPS[r.stamp] ? '<svg class="mini-stamp" viewBox="0 0 40 40"><use href="#st-'+r.stamp+'"/></svg>' : '')) : '';
     grid += '<button data-go="'+code+'"><i class="dot"'+
       (isVisited(code)?' style="background:'+((r&&r.color)||'var(--accent)')+';border-color:transparent"':'')+
-      '></i>'+esc(m.n)+stampSvg+'<span class="cnt">'+(cnt? cnt+'건':'')+'</span></button>';
+      '></i>'+esc(m.n)+stampSvg+'<span class="cnt">'+(cnt? cnt+'회':'')+'</span></button>';
   }
   const legacy = store.regions[p];
   const hasLegacy = legacy && (legacy.trips.length || legacy.places.length || photosOf(p).length);
