@@ -1670,6 +1670,27 @@ function downscaleSquare(file, dim, q){
 }
 function closeStampModal(){ stampModal.classList.add('hidden'); stampModal.innerHTML=''; }
 
+/* ---------- 기존 사진 → 여행 기록 자동 연결(백필) ----------
+   그 지역에 여행 기록이 정확히 1개뿐이면 안전하게 자동 연결, 2개 이상이면 애매하니 손대지 않음 */
+async function backfillPhotoTripLinks(){
+  let changed = 0;
+  for(const [code, arr] of Object.entries(photoCache)){
+    if(!MUNIS[code] && !PROVS[code]) continue;
+    const trips = (store.regions[code] && store.regions[code].trips) || [];
+    if(trips.length !== 1) continue;
+    const onlyId = trips[0].id;
+    for(const ph of arr){
+      if(!ph.tripId){
+        ph.tripId = onlyId;
+        await putPhoto(ph);
+        changed++;
+      }
+    }
+  }
+  if(changed) toast(changed+'장의 기존 사진을 여행 기록에 자동으로 연결했어요');
+  return changed;
+}
+
 /* ================= 사진 ================= */
 let photoTarget = null, photoTripTarget = null;
 document.getElementById('photoInput').addEventListener('change', async ev=>{
@@ -1881,6 +1902,7 @@ async function mergeData(data){
     added.photos++;
   }
   saveStore();
+  await backfillPhotoTripLinks();
   rebuildStamps(); paintMap(); renderPanel();
   toast('합치기 완료! 기록 '+added.trips+' · 장소 '+added.places+' · 사진 '+added.photos+'개가 추가됐어요');
 }
@@ -1909,6 +1931,7 @@ document.getElementById('importInput').addEventListener('change', async ev=>{
       await putPhoto(p);
     }
     await loadPhotos();
+    await backfillPhotoTripLinks();
     rebuildStamps(); setYearFilter(null); goCountry(); toast('백업을 불러왔어요');
   }catch(e){
     toast('가져오기에 실패했어요 — 이 앱에서 내보낸 백업 파일인지 확인해 주세요');
@@ -2151,6 +2174,7 @@ function toast(msg){
   applySkin();
   applyTitle();
   await loadPhotos();
+  await backfillPhotoTripLinks();
   rebuildStamps();
   paintMap();
   renderPanel();
